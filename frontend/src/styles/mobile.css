@@ -1,0 +1,15 @@
+@media (max-width: 768px) {
+  button, a { min-height: 44px; min-width: 44px; }
+  body { font-size: 16px; }
+  .grid { grid-template-columns: 1fr !important; }
+  .modal { width: 100% !important; margin: 0 !important; border-radius: 0 !important; }
+  .desktop-only { display: none !important; }
+  input, select, textarea { font-size: 16px !important; }
+}
+
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}

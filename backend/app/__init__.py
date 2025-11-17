@@ -1,0 +1,1 @@
+# FastAPI Auction Platform
