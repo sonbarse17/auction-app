@@ -8,7 +8,9 @@ __pycache__/
 env/
 venv/
 ENV/
-.venv
+.venv/
+backend/venv/
+frontend/node_modules/
 
 # Build outputs
 dist/
