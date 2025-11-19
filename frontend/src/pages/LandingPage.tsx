@@ -115,7 +115,7 @@ export const LandingPage: React.FC = () => {
             className="text-center max-w-3xl mx-auto"
             variants={heroVariants}
           >
-            <motion.h2 className="text-3xl md:text-5xl font-bold mb-12 text-white drop-shadow-lg uppercase" style={{textShadow: '0 4px 8px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3)'}} variants={heroItemVariants}>
+            <motion.h2 className="text-3xl md:text-5xl font-bold mb-12 text-white drop-shadow-lg uppercase" style={{fontFamily: 'Montserrat, sans-serif', textShadow: '0 4px 8px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3)'}} variants={heroItemVariants}>
               Real-Time Player Auctions
             </motion.h2>
             <motion.p className="text-base md:text-xl text-cyan-100 mb-8 mt-6" variants={heroItemVariants}>
