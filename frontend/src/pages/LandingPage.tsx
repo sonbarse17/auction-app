@@ -62,13 +62,13 @@ export const LandingPage: React.FC = () => {
     <div className="min-h-screen bg-background">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <Trophy size={32} className="text-white" />
-              <h1 className="text-2xl font-bold text-white">Sports Auction Platform</h1>
+            <div className="flex items-center gap-2 md:gap-3">
+              <Trophy size={24} className="text-white md:w-8 md:h-8" />
+              <h1 className="text-lg md:text-2xl font-bold text-white">Sports Auction</h1>
             </div>
-            <div className="flex gap-6">
+            <div className="flex gap-3 md:gap-6">
               {isAuthenticated ? (
                 <button className="relative text-white text-sm font-semibold pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full" onClick={() => navigate('/organizer')}>
                   Dashboard
@@ -137,10 +137,10 @@ export const LandingPage: React.FC = () => {
             className="text-center max-w-3xl mx-auto"
             variants={heroVariants}
           >
-            <motion.h2 className="text-5xl font-bold mb-6 text-white drop-shadow-lg" variants={heroItemVariants}>
+            <motion.h2 className="text-3xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg" variants={heroItemVariants}>
               Real-Time Player Auctions
             </motion.h2>
-            <motion.p className="text-xl text-cyan-100 mb-8" variants={heroItemVariants}>
+            <motion.p className="text-base md:text-xl text-cyan-100 mb-8" variants={heroItemVariants}>
               <EncryptedText
                 text="Experience the thrill of live sports player auctions. Build your dream team with strategic bidding."
                 encryptedClassName="text-purple-300/50"
@@ -148,11 +148,11 @@ export const LandingPage: React.FC = () => {
                 revealDelayMs={50}
               />
             </motion.p>
-            <motion.div className="flex flex-wrap justify-center gap-8" variants={heroItemVariants}>
-              <button className="relative text-white text-lg font-semibold pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full" onClick={() => navigate('/login')}>
+            <motion.div className="flex flex-wrap justify-center gap-4 md:gap-8" variants={heroItemVariants}>
+              <button className="relative text-white text-base md:text-lg font-semibold pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full" onClick={() => navigate('/login')}>
                 Get Started
               </button>
-              <button className="relative text-white text-lg font-semibold pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full" onClick={() => navigate('/register')}>
+              <button className="relative text-white text-base md:text-lg font-semibold pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full" onClick={() => navigate('/register')}>
                 Learn More
               </button>
             </motion.div>
@@ -161,9 +161,9 @@ export const LandingPage: React.FC = () => {
       </motion.div>
 
       {/* Tournaments Section */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-12">
         <div className="mb-8">
-          <h3 className="text-3xl font-bold mb-2">Live & Upcoming Tournaments</h3>
+          <h3 className="text-2xl md:text-3xl font-bold mb-2">Live & Upcoming Tournaments</h3>
           <p className="text-gray-600">Join exciting auctions and build your winning team</p>
         </div>
 
@@ -223,8 +223,8 @@ export const LandingPage: React.FC = () => {
 
       {/* Features Section */}
       <div className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <h3 className="text-3xl font-bold text-center mb-12">Platform Features</h3>
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <h3 className="text-2xl md:text-3xl font-bold text-center mb-12">Platform Features</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <motion.div className="text-center" whileHover={{ y: -10 }}>
               <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">

@@ -6,6 +6,8 @@ import { Card } from '../components/Card';
 import { motion } from 'framer-motion';
 import { LogIn, ArrowLeft, User, Mail, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SplineScene } from '../components/ui/spline';
+import { Spotlight } from '../components/ui/spotlight';
 
 interface LoginProps {
   initialState?: 'login' | 'register';
@@ -56,24 +58,24 @@ export const Login: React.FC<LoginProps> = ({ initialState = 'login' }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <div 
-        className="w-1/2 bg-cover bg-center" 
-        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1510915362834-b83c749b57a5)' }}
-      >
-        <div className="h-full w-full bg-primary bg-opacity-70 flex items-center justify-center">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-white text-center p-12"
-          >
-            <h2 className="text-4xl font-bold mb-4">Join the Action</h2>
-            <p className="text-xl">Bid, win, and build your ultimate team.</p>
-          </motion.div>
+    <div className="min-h-screen bg-background flex flex-col md:flex-row">
+      <div className="hidden md:block md:w-1/2 bg-black/[0.96] relative overflow-hidden">
+        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+        <div className="h-full flex">
+          <div className="flex-1 p-8 relative z-10 flex flex-col justify-center">
+            <motion.h1 initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.2 }} className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
+              Join the Action
+            </motion.h1>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.4 }} className="mt-4 text-neutral-300 max-w-lg">
+              Bid, win, and build your ultimate team with real-time auctions and strategic bidding.
+            </motion.p>
+          </div>
+          <div className="flex-1 relative">
+            <SplineScene scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" className="w-full h-full" />
+          </div>
         </div>
       </div>
-      <div className="w-1/2 flex items-center justify-center p-12">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
