@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
-import { Trophy, LogOut, Menu, X, User } from 'lucide-react';
+import { LogOut, Menu, X, User } from 'lucide-react';
 
 interface LayoutWithSidebarProps {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ export const LayoutWithSidebar: React.FC<LayoutWithSidebarProps> = ({ children, 
         {/* Logo */}
         <div className="h-[72px] px-4 border-b border-gray-200 flex items-center justify-between group">
           <div className="flex items-center gap-2">
-            <Trophy className="h-6 w-6 text-primary" />
+            <img src="/icons/trophy.png" alt="Trophy" className="h-6 w-6" loading="lazy" decoding="async" />
             <span className="font-bold text-lg md:hidden md:group-hover:block">{title}</span>
           </div>
           <button onClick={() => setSidebarOpen(false)} className="md:hidden">

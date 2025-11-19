@@ -5,7 +5,7 @@ import { useAuthStore } from '../stores/authStore';
 import type { Tournament } from '../types';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { Trophy, Calendar, Play, LogIn, Gavel, Users, BarChart } from 'lucide-react';
+import { Calendar, Play, LogIn, Gavel, Users, BarChart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { EncryptedText } from '../components/EncryptedText';
 import FloatingLines from '../components/FloatingLines';
@@ -64,10 +64,10 @@ export const LandingPage: React.FC = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2 md:gap-3">
-              <Trophy size={24} className="text-white md:w-8 md:h-8" />
+            <button onClick={() => navigate('/')} className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity">
+              <img src="/icons/trophy.png" alt="Trophy" className="w-6 h-6 md:w-8 md:h-8" loading="eager" decoding="async" />
               <h1 className="text-lg md:text-2xl font-bold text-white">Sports Auction</h1>
-            </div>
+            </button>
             <div className="flex gap-3 md:gap-6">
               {isAuthenticated ? (
                 <button className="relative text-white text-sm font-semibold pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white after:transition-all after:duration-300 hover:after:w-full" onClick={() => navigate('/organizer')}>
@@ -109,38 +109,16 @@ export const LandingPage: React.FC = () => {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 py-24">
-          <div className="flex justify-between items-center mb-12" style={{display: 'none'}}>
-            <div className="flex items-center gap-3">
-              <Trophy size={40} />
-              <h1 className="text-3xl font-bold">Sports Auction Platform</h1>
-            </div>
-            <div className="flex gap-3">
-              {isAuthenticated ? (
-                <Button onClick={() => navigate('/organizer')} variant="secondary">
-                  Dashboard
-                </Button>
-              ) : (
-                <>
-                  <Button onClick={() => navigate('/login')} variant="secondary" className="px-3 py-1.5 text-sm flex items-center">
-                    <LogIn className="w-4 h-4 mr-1" />
-                    Login
-                  </Button>
-                  <Button onClick={() => navigate('/register')} className="px-3 py-1.5 text-sm">
-                    Sign Up
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
+
           
           <motion.div 
             className="text-center max-w-3xl mx-auto"
             variants={heroVariants}
           >
-            <motion.h2 className="text-3xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg" variants={heroItemVariants}>
+            <motion.h2 className="text-3xl md:text-5xl font-bold mb-12 text-white drop-shadow-lg uppercase" style={{textShadow: '0 4px 8px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3)'}} variants={heroItemVariants}>
               Real-Time Player Auctions
             </motion.h2>
-            <motion.p className="text-base md:text-xl text-cyan-100 mb-8" variants={heroItemVariants}>
+            <motion.p className="text-base md:text-xl text-cyan-100 mb-8 mt-6" variants={heroItemVariants}>
               <EncryptedText
                 text="Experience the thrill of live sports player auctions. Build your dream team with strategic bidding."
                 encryptedClassName="text-purple-300/50"
@@ -188,7 +166,7 @@ export const LandingPage: React.FC = () => {
                         {tournament.status.toUpperCase()}
                       </span>
                     </div>
-                    <Trophy className="text-secondary" size={32} />
+                    <img src="/icons/trophy.png" alt="Trophy" className="w-8 h-8" loading="lazy" decoding="async" />
                   </div>
                   
                   <p className="text-gray-600 mb-4 line-clamp-2">{tournament.description}</p>
@@ -212,7 +190,7 @@ export const LandingPage: React.FC = () => {
 
         {tournaments.length === 0 && (
           <div className="text-center py-12">
-            <Trophy className="mx-auto text-gray-400 mb-4" size={64} />
+            <img src="/icons/trophy.png" alt="Trophy" className="w-16 h-16 mx-auto mb-4 opacity-40" loading="lazy" decoding="async" />
             <p className="text-gray-600 text-lg">No tournaments available at the moment</p>
           </div>
         )}
