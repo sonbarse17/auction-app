@@ -16,10 +16,6 @@ build/
 *.egg-info/
 .eggs/
 
-# Git
-.git/
-.gitignore
-
 # Environment variables
 .env
 .env.local
@@ -45,7 +41,6 @@ yarn-error.log*
 # Testing
 coverage/
 .pytest_cache/
-.coverage
 
 # Database
 *.db
@@ -54,11 +49,3 @@ coverage/
 
 # Redis
 dump.rdb
-
-# Documentation
-README.md
-*.md
-
-# CI/CD
-.github/
-.gitlab-ci.yml

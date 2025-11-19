@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Layout } from '../components/Layout';
+import { LayoutWithSidebar } from '../components/LayoutWithSidebar';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { User, Mail, Lock, Save, Upload, Moon, Sun } from 'lucide-react';
+import { User, Mail, Lock, Save, Upload, Moon, Sun, UserCircle } from 'lucide-react';
+import { getNavigationLinks } from '../config/navigation';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
 import { useThemeStore } from '../stores/themeStore';
@@ -102,8 +103,10 @@ export const Profile: React.FC = () => {
     }
   };
 
+  const nav = getNavigationLinks(user?.roles || []);
+
   return (
-    <Layout>
+    <LayoutWithSidebar links={nav.links} title={nav.title}>
       <div className="max-w-3xl">
         <h1 className="text-3xl font-bold mb-6">Profile Settings</h1>
 
@@ -121,8 +124,8 @@ export const Profile: React.FC = () => {
                 {profilePhoto ? (
                   <img src={profilePhoto} alt="Profile" className="w-20 h-20 rounded-full object-cover" />
                 ) : (
-                  <div className="w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-semibold">
-                    {user?.full_name?.charAt(0).toUpperCase()}
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white">
+                    <UserCircle size={48} />
                   </div>
                 )}
                 <div className="flex-1">
@@ -133,12 +136,7 @@ export const Profile: React.FC = () => {
                     placeholder="Photo URL or upload"
                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none mb-2"
                   />
-                  <Button
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                    variant="secondary"
-                    className="w-full"
-                  >
+                  <Button onClick={() => fileInputRef.current?.click()} disabled={uploading} variant="secondary" className="w-full">
                     <Upload className="h-4 w-4 mr-2" />
                     {uploading ? 'Uploading...' : 'Upload Photo'}
                   </Button>
@@ -175,18 +173,11 @@ export const Profile: React.FC = () => {
             <div>
               <label className="block text-sm font-medium mb-1">Roles</label>
               <div className="flex flex-wrap gap-2">
-                {user?.roles.map((role) => (
-                  <span key={role} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                    {role}
-                  </span>
-                ))}
+                {user?.roles.map((role) => <span key={role} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">{role}</span>)}
               </div>
             </div>
 
-            <Button onClick={handleUpdateProfile} disabled={loading || uploading}>
-              <Save className="h-4 w-4 mr-2" />
-              Save Changes
-            </Button>
+            <Button onClick={handleUpdateProfile} disabled={loading || uploading}><Save className="h-4 w-4 mr-2" />Save Changes</Button>
           </div>
         </Card>
 
@@ -197,10 +188,7 @@ export const Profile: React.FC = () => {
               <h2 className="text-xl font-semibold mb-1">Appearance</h2>
               <p className="text-sm text-gray-600">Customize your interface theme</p>
             </div>
-            <button
-              onClick={toggleTheme}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-            >
+            <button onClick={toggleTheme} className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
             </button>
@@ -245,13 +233,10 @@ export const Profile: React.FC = () => {
               />
             </div>
 
-            <Button onClick={handleChangePassword} disabled={loading}>
-              <Lock className="h-4 w-4 mr-2" />
-              Change Password
-            </Button>
+            <Button onClick={handleChangePassword} disabled={loading}><Lock className="h-4 w-4 mr-2" />Change Password</Button>
           </div>
         </Card>
       </div>
-    </Layout>
+    </LayoutWithSidebar>
   );
 };

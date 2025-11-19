@@ -3,8 +3,10 @@ import { teamApi, tournamentApi } from '../services/api';
 import type { Team, Tournament } from '../types';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { Layout } from '../components/Layout';
+import { LayoutWithSidebar } from '../components/LayoutWithSidebar';
 import { Plus, X, Users } from 'lucide-react';
+import { getNavigationLinks } from '../config/navigation';
+import { useAuthStore } from '../stores/authStore';
 
 export const TeamManagement: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);
@@ -62,8 +64,11 @@ export const TeamManagement: React.FC = () => {
     }
   };
 
+  const { user } = useAuthStore();
+  const nav = getNavigationLinks(user?.roles || []);
+
   return (
-    <Layout>
+    <LayoutWithSidebar links={nav.links} title={nav.title}>
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold">My Teams</h1>
@@ -104,10 +109,12 @@ export const TeamManagement: React.FC = () => {
         </div>
 
         {teams.length === 0 && (
-        <div className="text-center py-12">
-          <Users className="mx-auto text-gray-400 mb-4" size={48} />
-          <p className="text-gray-600 mb-4">No teams registered yet</p>
-          <Button onClick={() => setShowCreateModal(true)}>Register Your First Team</Button>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <Users className="mx-auto text-gray-400 mb-4" size={48} />
+            <p className="text-gray-600 mb-4">No teams registered yet</p>
+            <Button onClick={() => setShowCreateModal(true)}>Register Your First Team</Button>
+          </div>
         </div>
       )}
 
@@ -116,9 +123,7 @@ export const TeamManagement: React.FC = () => {
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Register Team</h2>
-              <button onClick={() => setShowCreateModal(false)} className="text-gray-500 hover:text-gray-700">
-                <X size={24} />
-              </button>
+              <button onClick={() => setShowCreateModal(false)} className="text-gray-500 hover:text-gray-700"><X size={24} /></button>
             </div>
 
             <div className="space-y-4">
@@ -179,6 +184,6 @@ export const TeamManagement: React.FC = () => {
           </div>
         </div>
       )}
-    </Layout>
+    </LayoutWithSidebar>
   );
 };

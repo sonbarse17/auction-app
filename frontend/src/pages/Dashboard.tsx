@@ -10,7 +10,9 @@ export const Dashboard: React.FC = () => {
     if (!user) return;
 
     // Route based on user role
-    if (user.roles.includes('admin') || user.roles.includes('organizer')) {
+    if (user.roles.includes('admin')) {
+      navigate('/admin');
+    } else if (user.roles.includes('organizer')) {
       navigate('/organizer');
     } else if (user.roles.includes('team_owner')) {
       navigate('/teams');

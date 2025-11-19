@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { playerApi } from '../services/api';
 import type { Player } from '../types';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { Layout } from '../components/Layout';
-import { Plus, X, Edit2, Trash2, Search } from 'lucide-react';
+import { LayoutWithSidebar } from '../components/LayoutWithSidebar';
+import { Plus, X, Edit2, Trash2, Search, Upload } from 'lucide-react';
+import { getNavigationLinks } from '../config/navigation';
+import { useAuthStore } from '../stores/authStore';
+import { useToastStore } from '../stores/toastStore';
+import { authApi } from '../services/api';
 
 export const PlayerManagement: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -22,6 +26,9 @@ export const PlayerManagement: React.FC = () => {
   const [rating, setRating] = useState('7.0');
   const [imageUrl, setImageUrl] = useState('');
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { addToast } = useToastStore();
 
   useEffect(() => {
     loadPlayers();
@@ -130,8 +137,11 @@ export const PlayerManagement: React.FC = () => {
 
   const positions = ['Batsman', 'Bowler', 'All-rounder', 'Wicket-keeper'];
 
+  const { user } = useAuthStore();
+  const nav = getNavigationLinks(user?.roles || []);
+
   return (
-    <Layout>
+    <LayoutWithSidebar links={nav.links} title={nav.title}>
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold">Player Pool</h1>
@@ -179,12 +189,8 @@ export const PlayerManagement: React.FC = () => {
                   <p className="text-sm text-gray-500">{player.position}</p>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => handleEdit(player)} className="text-blue-600 hover:text-blue-800">
-                    <Edit2 size={18} />
-                  </button>
-                  <button onClick={() => handleDelete(player.id)} className="text-red-600 hover:text-red-800">
-                    <Trash2 size={18} />
-                  </button>
+                  <button onClick={() => handleEdit(player)} className="text-blue-600 hover:text-blue-800"><Edit2 size={18} /></button>
+                  <button onClick={() => handleDelete(player.id)} className="text-red-600 hover:text-red-800"><Trash2 size={18} /></button>
                 </div>
               </div>
               <div className="space-y-1 text-sm">
@@ -218,9 +224,7 @@ export const PlayerManagement: React.FC = () => {
           <div className="bg-white rounded-lg p-6 w-full max-w-md my-8">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{editingPlayer ? 'Edit Player' : 'Add Player'}</h2>
-              <button onClick={resetForm} className="text-gray-500 hover:text-gray-700">
-                <X size={24} />
-              </button>
+              <button onClick={resetForm} className="text-gray-500 hover:text-gray-700"><X size={24} /></button>
             </div>
 
             <div className="space-y-4">
@@ -281,14 +285,10 @@ export const PlayerManagement: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Image URL</label>
-                <input
-                  type="text"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="https://..."
-                />
+                <label className="block text-sm font-medium mb-1">Player Photo</label>
+                <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none mb-2" placeholder="Photo URL or upload" />
+                <Button onClick={() => fileInputRef.current?.click()} disabled={uploading} variant="secondary" className="w-full"><Upload className="h-4 w-4 mr-2" />{uploading ? 'Uploading...' : 'Upload Photo'}</Button>
+                <input ref={fileInputRef} type="file" accept="image/*" onChange={async (e) => { const file = e.target.files?.[0]; if (!file) return; if (!file.type.startsWith('image/')) { addToast('Please select an image file', 'error'); return; } if (file.size > 5 * 1024 * 1024) { addToast('File size must be less than 5MB', 'error'); return; } setUploading(true); try { const { data } = await authApi.uploadPhoto(file); setImageUrl(data.photo_url); addToast('Photo uploaded successfully', 'success'); } catch (err) { addToast('Failed to upload photo', 'error'); } finally { setUploading(false); } }} className="hidden" />
               </div>
 
               <div className="flex gap-2 pt-4">
@@ -303,6 +303,6 @@ export const PlayerManagement: React.FC = () => {
           </div>
         </div>
       )}
-    </Layout>
+    </LayoutWithSidebar>
   );
 };

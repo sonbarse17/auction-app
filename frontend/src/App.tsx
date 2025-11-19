@@ -42,7 +42,8 @@ function App() {
       <InstallPrompt />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login initialState="login" />} />
+        <Route path="/register" element={<Login initialState="register" />} />
         
         <Route
           path="/dashboard"
@@ -91,6 +92,15 @@ function App() {
         
         <Route
           path="/teams"
+          element={
+            <PrivateRoute>
+              <TeamManagement />
+            </PrivateRoute>
+          }
+        />
+        
+        <Route
+          path="/team-management"
           element={
             <PrivateRoute>
               <TeamManagement />

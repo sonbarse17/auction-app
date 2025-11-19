@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '../components/Card';
-import { Layout } from '../components/Layout';
+import { LayoutWithSidebar } from '../components/LayoutWithSidebar';
 import { Users, Shield, Trash2, CheckCircle, XCircle } from 'lucide-react';
+import { getNavigationLinks } from '../config/navigation';
+import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
 import { adminApi } from '../services/api';
 import type { User } from '../types';
@@ -64,12 +66,15 @@ export const AdminPanel: React.FC = () => {
     }
   };
 
+  const { user } = useAuthStore();
+  const nav = getNavigationLinks(user?.roles || []);
+
   return (
-    <Layout>
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold">Admin Panel</h1>
-        <p className="text-gray-600">Manage users and system settings</p>
-      </div>
+    <LayoutWithSidebar links={nav.links} title={nav.title}>
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold">Admin Panel</h1>
+            <p className="text-gray-600">Manage users and system settings</p>
+          </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -138,30 +143,11 @@ export const AdminPanel: React.FC = () => {
                     <td className="px-4 py-3 text-sm">
                       {editingRoles === user.id ? (
                         <div className="flex flex-col gap-1">
-                          {availableRoles.map(role => (
-                            <label key={role} className="flex items-center gap-1 text-xs">
-                              <input
-                                type="checkbox"
-                                checked={selectedRoles.includes(role)}
-                                onChange={(e) => {
-                                  if (e.target.checked) {
-                                    setSelectedRoles([...selectedRoles, role]);
-                                  } else {
-                                    setSelectedRoles(selectedRoles.filter(r => r !== role));
-                                  }
-                                }}
-                              />
-                              {role}
-                            </label>
-                          ))}
+                          {availableRoles.map(role => <label key={role} className="flex items-center gap-1 text-xs"><input type="checkbox" checked={selectedRoles.includes(role)} onChange={(e) => { if (e.target.checked) { setSelectedRoles([...selectedRoles, role]); } else { setSelectedRoles(selectedRoles.filter(r => r !== role)); } }} />{role}</label>)}
                         </div>
                       ) : (
                         <div className="flex flex-wrap gap-1">
-                          {user.roles.map(role => (
-                            <span key={role} className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
-                              {role}
-                            </span>
-                          ))}
+                          {user.roles.map(role => <span key={role} className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">{role}</span>)}
                         </div>
                       )}
                     </td>
@@ -170,23 +156,9 @@ export const AdminPanel: React.FC = () => {
                     </td>
                     <td className="px-4 py-3 text-sm text-right">
                       <div className="flex justify-end gap-2">
-                        {!user.is_approved && (
-                          <button onClick={() => handleApprove(user.id)} className="text-green-600 hover:text-green-800" title="Approve">
-                            <CheckCircle size={18} />
-                          </button>
-                        )}
-                        {editingRoles === user.id ? (
-                          <button onClick={() => handleSaveRoles(user.id)} className="px-2 py-1 bg-blue-600 text-white rounded text-xs">
-                            Save
-                          </button>
-                        ) : (
-                          <button onClick={() => handleEditRoles(user)} className="text-blue-600 hover:text-blue-800" title="Edit Roles">
-                            <Shield size={18} />
-                          </button>
-                        )}
-                        <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-800" title="Delete">
-                          <Trash2 size={18} />
-                        </button>
+                        {!user.is_approved && <button onClick={() => handleApprove(user.id)} className="text-green-600 hover:text-green-800" title="Approve"><CheckCircle size={18} /></button>}
+                        {editingRoles === user.id ? <button onClick={() => handleSaveRoles(user.id)} className="px-2 py-1 bg-blue-600 text-white rounded text-xs">Save</button> : <button onClick={() => handleEditRoles(user)} className="text-blue-600 hover:text-blue-800" title="Edit Roles"><Shield size={18} /></button>}
+                        <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-800" title="Delete"><Trash2 size={18} /></button>
                       </div>
                     </td>
                   </tr>
@@ -195,6 +167,6 @@ export const AdminPanel: React.FC = () => {
             </table>
           </div>
         </Card>
-    </Layout>
+    </LayoutWithSidebar>
   );
 };
