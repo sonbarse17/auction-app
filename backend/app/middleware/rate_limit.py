@@ -22,14 +22,16 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         r = await self.get_redis()
         key = f"rate_limit:{client_ip}"
         
-        current = await r.get(key)
-        if current and int(current) >= 100:
-            raise HTTPException(status_code=429, detail="Too many requests")
+        # Use atomic increment
+        # If key doesn't exist, it's created with value 1
+        current = await r.incr(key)
         
-        pipe = r.pipeline()
-        pipe.incr(key)
-        pipe.expire(key, 60)
-        await pipe.execute()
+        # Set expiry on first request
+        if current == 1:
+            await r.expire(key, 60)
+            
+        if current > 100:
+            raise HTTPException(status_code=429, detail="Too many requests")
         
         response = await call_next(request)
         return response

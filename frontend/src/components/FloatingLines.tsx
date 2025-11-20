@@ -335,6 +335,8 @@ export default function FloatingLines({
 
     let raf = 0;
     const renderLoop = () => {
+      if (!containerRef.current) return;
+
       uniforms.iTime.value = clock.getElapsedTime();
       if (interactive) {
         currentMouseRef.current.lerp(targetMouseRef.current, mouseDamping);
@@ -349,10 +351,27 @@ export default function FloatingLines({
       renderer.render(scene, camera);
       raf = requestAnimationFrame(renderLoop);
     };
-    renderLoop();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!raf) renderLoop();
+        } else {
+          if (raf) {
+            cancelAnimationFrame(raf);
+            raf = 0;
+          }
+        }
+      });
+    }, { threshold: 0.1 });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
 
     return () => {
-      cancelAnimationFrame(raf);
+      observer.disconnect();
+      if (raf) cancelAnimationFrame(raf);
       if (ro) ro.disconnect();
       if (interactive) {
         renderer.domElement.removeEventListener('pointermove', handlePointerMove);

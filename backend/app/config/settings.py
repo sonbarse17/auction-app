@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     jwt_secret: str
     jwt_algorithm: str = "HS256"
     jwt_expiration_minutes: int = 1440
+    log_level: str = "INFO"
 
     class Config:
         env_file = ".env"

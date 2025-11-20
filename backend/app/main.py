@@ -7,8 +7,28 @@ from app.websocket.auction_ws import router as ws_router
 from app.services.timer_service import timer_service
 from app.middleware.rate_limit import RateLimitMiddleware
 from app.middleware.security import SecurityHeadersMiddleware
+from app.core.logging import setup_logging
+from contextlib import asynccontextmanager
+import logging
 
-app = FastAPI(title="Sports Auction Platform")
+# Setup logging
+setup_logging()
+logger = logging.getLogger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info("Starting up application...")
+    await init_db()
+    await timer_service.connect()
+    timer_service.start_background_task()
+    yield
+    # Shutdown
+    logger.info("Shutting down application...")
+    await timer_service.stop_background_task()
+    await close_db()
+
+app = FastAPI(title="Sports Auction Platform", lifespan=lifespan)
 
 import os
 
@@ -30,16 +50,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-async def startup():
-    await init_db()
-    await timer_service.connect()
-    timer_service.start_background_task()
 
-@app.on_event("shutdown")
-async def shutdown():
-    await timer_service.stop_background_task()
-    await close_db()
 
 app.include_router(api_router)
 app.include_router(ws_router)
