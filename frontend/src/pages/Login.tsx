@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
@@ -6,8 +6,9 @@ import { Card } from '../components/Card';
 import { motion } from 'framer-motion';
 import { LogIn, ArrowLeft, User, Mail, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { SplineScene } from '../components/ui/spline';
-import { Spotlight } from '../components/ui/spotlight';
+
+const SplineScene = lazy(() => import('../components/ui/spline').then(m => ({ default: m.SplineScene })));
+const Spotlight = lazy(() => import('../components/ui/spotlight').then(m => ({ default: m.Spotlight })));
 
 interface LoginProps {
   initialState?: 'login' | 'register';
@@ -60,18 +61,22 @@ export const Login: React.FC<LoginProps> = ({ initialState = 'login' }) => {
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row">
       <div className="hidden md:block md:w-1/2 bg-black/[0.96] relative overflow-hidden">
-        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+        <Suspense fallback={null}>
+          <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+        </Suspense>
         <div className="h-full flex">
           <div className="flex-1 p-8 relative z-10 flex flex-col justify-center">
-            <motion.h1 initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.2 }} className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
+            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
               Join the Action
-            </motion.h1>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.4 }} className="mt-4 text-neutral-300 max-w-lg">
+            </h1>
+            <p className="mt-4 text-neutral-300 max-w-lg">
               Bid, win, and build your ultimate team with real-time auctions and strategic bidding.
-            </motion.p>
+            </p>
           </div>
           <div className="flex-1 relative">
-            <SplineScene scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" className="w-full h-full" />
+            <Suspense fallback={<div className="w-full h-full bg-gradient-to-br from-purple-900/20 to-blue-900/20" />}>
+              <SplineScene scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode" className="w-full h-full" />
+            </Suspense>
           </div>
         </div>
       </div>
@@ -82,11 +87,9 @@ export const Login: React.FC<LoginProps> = ({ initialState = 'login' }) => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md relative"
         >
-          <Link to="/" className="absolute top-4 left-4 flex items-center">
-            <span className="relative text-black text-sm font-semibold pb-1 flex items-center after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-black after:transition-all after:duration-300 hover:after:w-full">
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Back
-            </span>
+          <Link to="/" className="absolute -top-8 left-0 flex items-center text-black text-sm font-semibold hover:opacity-70 transition-opacity">
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back
           </Link>
           <Card>
             <h1 className="text-3xl font-bold text-center mb-6 text-text">
@@ -95,10 +98,7 @@ export const Login: React.FC<LoginProps> = ({ initialState = 'login' }) => {
             
             <form onSubmit={handleSubmit} className="space-y-4">
               {isRegister && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+                <div>
                   <label className="block text-sm font-medium mb-1">Full Name</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -111,14 +111,10 @@ export const Login: React.FC<LoginProps> = ({ initialState = 'login' }) => {
                       required
                     />
                   </div>
-                </motion.div>
+                </div>
               )}
               
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
+              <div>
                 <label className="block text-sm font-medium mb-1">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -131,13 +127,9 @@ export const Login: React.FC<LoginProps> = ({ initialState = 'login' }) => {
                     required
                   />
                 </div>
-              </motion.div>
+              </div>
               
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
+              <div>
                 <label className="block text-sm font-medium mb-1">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
@@ -150,14 +142,14 @@ export const Login: React.FC<LoginProps> = ({ initialState = 'login' }) => {
                     required
                   />
                 </div>
-              </motion.div>
+              </div>
               
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+              <div>
                 <button type="submit" className="w-full px-8 py-2 bg-black text-white text-sm rounded-md font-semibold hover:bg-black/[0.8] hover:shadow-lg transition-all duration-300 flex items-center justify-center">
                   <LogIn className="w-4 h-4 mr-2" />
                   {isRegister ? 'Register' : 'Login'}
                 </button>
-              </motion.div>
+              </div>
             </form>
             
             <p className="text-center mt-4 text-sm">
