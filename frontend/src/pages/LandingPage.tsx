@@ -4,7 +4,6 @@ import { tournamentApi } from '../services/api';
 import { useAuthStore } from '../stores/authStore';
 import type { Tournament } from '../types';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 import { Calendar, Play, LogIn, Gavel, Users, BarChart, CheckCircle, HelpCircle, Mail, Twitter, Linkedin, Github, TrendingUp, Award, Zap, UserPlus, DollarSign, Trophy, ArrowRight, Zap as Lightning, Shield, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
